@@ -2,18 +2,32 @@
 
 namespace App\Models\Shop;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
+    use HasTranslations;
+
+    public static function booted(): void
+    {
+        static::creating(function (Category $category) {
+            $category->slug = Str::slug($category->name);
+        });
+        
+        static::deleting(function (Category $category) {
+            $category->products()->sync([]);
+        });
+    }
 
     /**
      * @var string
@@ -25,6 +39,12 @@ class Category extends Model implements HasMedia
      */
     protected $casts = [
         'is_visible' => 'boolean',
+    ];
+
+    /** @var string[] */
+    public $translatable = [
+        'name',
+        'description',
     ];
 
     /** @return HasMany<Category> */

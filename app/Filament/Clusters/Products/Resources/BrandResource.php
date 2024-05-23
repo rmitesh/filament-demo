@@ -43,16 +43,9 @@ class BrandResource extends Resource
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->maxLength(255)
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => in_array($operation, ['create', 'edit']) ? $set('slug', Str::slug($state)) : null),
-
-                                Forms\Components\TextInput::make('slug')
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->unique(Brand::class, 'slug', ignoreRecord: true),
+                                    ->unique(Brand::class, 'name', ignoreRecord: true),
                             ]),
+
                         Forms\Components\TextInput::make('website')
                             ->required()
                             ->maxLength(255)

@@ -7,6 +7,8 @@ use App\Models\Shop\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
+use Filament\Pages\SubNavigationPosition;
+use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,6 +17,8 @@ use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
+    use Translatable;
+    
     protected static ?string $model = Category::class;
 
     protected static ?string $cluster = Products::class;
@@ -27,6 +31,13 @@ class CategoryResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->latest();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -38,15 +49,7 @@ class CategoryResource extends Resource
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->maxLength(255)
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
-
-                                Forms\Components\TextInput::make('slug')
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->unique(Category::class, 'slug', ignoreRecord: true),
+                                    ->unique(Category::class, 'name', ignoreRecord: true),
                             ]),
 
                         Forms\Components\Select::make('parent_id')

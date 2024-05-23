@@ -3,13 +3,14 @@
 namespace App\Models\Shop;
 
 use App\Models\Address;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Brand extends Model implements HasMedia
 {
@@ -17,10 +18,16 @@ class Brand extends Model implements HasMedia
     use InteractsWithMedia;
     use HasTranslations;
 
+    public static function booted(): void
+    {
+        static::creating(function (Brand $brand) {
+            $brand->slug = Str::slug($brand->name);
+        });
+    }
+
     /** @var string[] */
     public $translatable = [
         'name',
-        'slug',
         'description',
     ];
 
