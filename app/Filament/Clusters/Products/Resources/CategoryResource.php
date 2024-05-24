@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Products\Resources;
 
 use App\Filament\Clusters\Products;
+use App\Filament\Clusters\Products\Resources\CategoryResource\Widgets\CategoryStats;
 use App\Models\Shop\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -123,6 +124,13 @@ class CategoryResource extends Resource
     {
         return [
             \App\Filament\Clusters\Products\Resources\CategoryResource\RelationManagers\ProductsRelationManager::class,
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            CategoryStats::class,
         ];
     }
 

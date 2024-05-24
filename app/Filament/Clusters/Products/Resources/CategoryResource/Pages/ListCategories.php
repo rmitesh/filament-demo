@@ -22,4 +22,9 @@ class ListCategories extends ListRecords
             Actions\LocaleSwitcher::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return CategoryResource::getWidgets();
+    }
 }

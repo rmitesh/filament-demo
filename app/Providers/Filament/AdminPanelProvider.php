@@ -17,7 +17,11 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Z3d0X\FilamentFabricator\Enums\BlockPickerStyle;
+use Z3d0X\FilamentFabricator\Facades\FilamentFabricator;
+use Z3d0X\FilamentFabricator\FilamentFabricatorPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -60,9 +64,26 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugin(
+            ->plugins([
+                FilamentFabricatorPlugin::make()
+                    ->blockPickerStyle(BlockPickerStyle::Modal),
+
                 SpatieLaravelTranslatablePlugin::make()
                     ->defaultLocales(['en', 'es', 'nl']),
-            );
+            ]);
+    }
+
+    public function boot(): void
+    {
+        FilamentFabricator::pushMeta([
+            new HtmlString('
+                <meta charset="utf-8" />
+                <meta http-equiv="x-ua-compatible" content="ie=edge" />
+            '), 
+        ]);
+
+        // FilamentFabricator::registerScripts([
+        //     // 'https://unpkg.com/browse/tippy.js@6.3.7/dist/tippy.esm.js',
+        // ]);
     }
 }
