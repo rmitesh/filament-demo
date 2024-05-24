@@ -23,6 +23,11 @@ class Brand extends Model implements HasMedia
         static::creating(function (Brand $brand) {
             $brand->slug = Str::slug($brand->name);
         });
+
+        static::deleting(function (Brand $brand) {
+            $brand->products()->delete();
+            $brand->addresses()->delete();
+        });
     }
 
     /** @var string[] */

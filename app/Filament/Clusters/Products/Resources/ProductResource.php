@@ -53,17 +53,7 @@ class ProductResource extends Resource
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->maxLength(255)
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                        $set('slug', Str::slug($state));
-                                    }),
-
-                                Forms\Components\TextInput::make('slug')
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->unique(Product::class, 'slug', ignoreRecord: true),
+                                    ->unique(Product::class, 'name', ignoreRecord: true),
 
                                 Forms\Components\MarkdownEditor::make('description')
                                     ->columnSpan('full'),

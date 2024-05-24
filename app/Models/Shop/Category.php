@@ -26,6 +26,7 @@ class Category extends Model implements HasMedia
         
         static::deleting(function (Category $category) {
             $category->products()->sync([]);
+            $category->children()->delete();
         });
     }
 
