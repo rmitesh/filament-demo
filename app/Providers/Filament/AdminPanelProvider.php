@@ -14,6 +14,7 @@ use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Foundation\Vite;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
@@ -65,8 +66,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                FilamentFabricatorPlugin::make()
-                    ->blockPickerStyle(BlockPickerStyle::Modal),
+                FilamentFabricatorPlugin::make(),
 
                 SpatieLaravelTranslatablePlugin::make()
                     ->defaultLocales(['en', 'es', 'nl']),
@@ -79,11 +79,17 @@ class AdminPanelProvider extends PanelProvider
             new HtmlString('
                 <meta charset="utf-8" />
                 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-            '), 
+            '),
         ]);
 
-        // FilamentFabricator::registerScripts([
-        //     // 'https://unpkg.com/browse/tippy.js@6.3.7/dist/tippy.esm.js',
-        // ]);
+        //Register scripts
+        FilamentFabricator::registerScripts([
+            app(Vite::class)('resources/js/app.js'), // vite
+        ]);
+
+        //Register styles
+        FilamentFabricator::registerStyles([
+            app(Vite::class)('resources/css/app.css'), // vite
+        ]);
     }
 }
