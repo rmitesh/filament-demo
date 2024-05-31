@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
@@ -20,6 +21,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     use HasFactory;
     use Notifiable;
     use HasRoles;
+    use HasPanelShield;
 
     /**
      * @var array<int, string>
