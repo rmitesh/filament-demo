@@ -28,6 +28,7 @@ class StoreManagerPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Gray,
             ])
+            ->login()
             ->discoverResources(in: app_path('Filament/StoreManager/Resources'), for: 'App\\Filament\\StoreManager\\Resources')
             ->discoverPages(in: app_path('Filament/StoreManager/Pages'), for: 'App\\Filament\\StoreManager\\Pages')
             ->pages([
