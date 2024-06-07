@@ -23,6 +23,8 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     use HasRoles;
     use HasPanelShield;
 
+    public const ROLE_MANAGER = 'manager';
+
     /**
      * @var array<int, string>
      */

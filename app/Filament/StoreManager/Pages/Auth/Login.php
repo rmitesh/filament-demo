@@ -2,6 +2,7 @@
 
 namespace App\Filament\StoreManager\Pages\Auth;
 
+use App\Models\User;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Facades\Filament;
 use Filament\Http\Responses\Auth\LoginResponse;
@@ -40,8 +41,10 @@ class Login extends BasePage
         $user = Filament::auth()->user();
 
         if (
-            ($user instanceof FilamentUser) &&
-            (! $user->canAccessPanel(Filament::getCurrentPanel()))
+            (
+                ($user instanceof FilamentUser) && (! $user->canAccessPanel(Filament::getCurrentPanel())) ||
+                !$user->hasRole(User::ROLE_MANAGER)
+            )
         ) {
             Filament::auth()->logout();
 
