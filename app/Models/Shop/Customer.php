@@ -4,17 +4,19 @@ namespace App\Models\Shop;
 
 use App\Models\Address;
 use App\Models\Comment;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Traits\HasRoles;
 
-class Customer extends Model
+class Customer extends Authenticatable
 {
     use HasFactory;
     use SoftDeletes;
+    use HasRoles;
 
     /**
      * @var string

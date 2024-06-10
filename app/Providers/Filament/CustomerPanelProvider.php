@@ -2,15 +2,14 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Pages\Dashboard;
-use App\Filament\StoreManager\Pages\Auth\Login;
-use App\Http\Middleware\StoreManagerAuthenticate;
+use App\Filament\Customer\Pages\Auth\Login;
+use App\Filament\Customer\Pages\Auth\Register;
+use App\Http\Middleware\CustomerAuthenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\SpatieLaravelTranslatablePlugin;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -21,33 +20,27 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class StoreManagerPanelProvider extends PanelProvider
+class CustomerPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('storeManager')
-            ->path('manager')
+            ->default()
+            ->id('customer')
             ->colors([
-                'primary' => Color::Gray,
+                'primary' => Color::Indigo,
             ])
             ->login(Login::class)
-            ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
-            ->discoverResources(in: app_path('Filament/StoreManager/Resources'), for: 'App\\Filament\\StoreManager\\Resources')
-            ->discoverPages(in: app_path('Filament/StoreManager/Pages'), for: 'App\\Filament\\StoreManager\\Pages')
+            ->registration(Register::class)
+            ->topNavigation()
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/StoreManager/Widgets'), for: 'App\\Filament\\StoreManager\\Widgets')
-            ->brandLogo(fn () => view('filament.app.logo'))
-            ->brandLogoHeight('1.25rem')
-            ->navigationGroups([
-                'Shop',
-            ])
-            ->databaseNotifications()
+            ->discoverResources(in: app_path('Filament/Customer/Resources'), for: 'App\\Filament\\Customer\\Resources')
+            ->discoverPages(in: app_path('Filament/Customer/Pages'), for: 'App\\Filament\\Customer\\Pages')
+            ->discoverWidgets(in: app_path('Filament/Customer/Widgets'), for: 'App\\Filament\\Customer\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -60,13 +53,9 @@ class StoreManagerPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->authGuard('manager')
+            ->authGuard('customer')
             ->authMiddleware([
-                StoreManagerAuthenticate::class,
-            ])
-            ->plugins([
-                SpatieLaravelTranslatablePlugin::make()
-                    ->defaultLocales(['en', 'es', 'nl']),
+                CustomerAuthenticate::class,
             ]);
     }
 }

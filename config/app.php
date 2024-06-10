@@ -177,6 +177,7 @@ return [
         App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\Filament\AppPanelProvider::class,
         App\Providers\Filament\StoreManagerPanelProvider::class,
+        App\Providers\Filament\CustomerPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
 
     ],
